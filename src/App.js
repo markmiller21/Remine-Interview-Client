@@ -3,9 +3,8 @@ import logo from './logo.svg';
 import './App.css';
 import Test from './CHANGEME.js';
 
-
 class App extends Component {
-    render() { 
+    render() {
         return (
             <div className="App">
                 <div className="App-header">
@@ -13,10 +12,12 @@ class App extends Component {
                     <h2>Remine Frontend Developer Test</h2>
                 </div>
                 <p className="App-intro">
-                    Congratulations!! You have gotten farther than 75% of our applicants. Don't stop here!
+                    Congratulations!! You have gotten farther than 75% of our
+                    applicants. Don't stop here!
                 </p>
                 <p>
-                    Do what you need to do to get this table to render filtered and fast.
+                    Do what you need to do to get this table to render filtered
+                    and fast.
                 </p>
                 <Test />
             </div>
