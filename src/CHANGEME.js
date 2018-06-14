@@ -27,7 +27,7 @@ class Test extends Component {
                 {this.state.loading ? (
                     <h2>Loading...</h2>
                 ) : (
-                    <RemineTable properties={[]} />
+                    <RemineTable properties={this.state.properties} />
                 )}
             </div>
         );
