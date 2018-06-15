@@ -3,14 +3,6 @@ import RemineTable from './components/Table/RemineTable/RemineTable';
 import BuildingTypeDD from './components/common/BuildingTypeDD';
 import API from './API';
 
-/**
- * Update `CHANGEME.js` and any other files you need to in order to allow a user to filter the `RemineTable` contents based on whether the location has:
- *   a number of beds in a user specified range
- *   a number of baths in a user specified range
- *   the same building type as the one specified by the user (the user can select from a list of building types that come from the API)
- *   If a user has not specified a bound in a range or a type for the building type, default to show all. If no filters are active or being applied, all locations should be shown in the `RemineTable`.
- */
-
 //  Note: I did not change the name of this component in case you all have automated tests for a "Test" Component
 class Test extends Component {
     constructor(props) {
@@ -18,10 +10,10 @@ class Test extends Component {
         this.state = {
             originalProperties: [],
             properties: [],
-            beds: 0,
-            baths: 0,
-            activeBedFilter: false,
-            activeBathFilter: false,
+            maxBeds: 100,
+            minBeds: 0,
+            maxBaths: 100,
+            minBaths: 0,
             loading: true,
             buildingType: '',
             possibleBuildingTypes: []
@@ -54,15 +46,15 @@ class Test extends Component {
             property => {
                 // if Bed filter is active, check to see if property has the correct # of Beds rooms
                 if (
-                    this.state.activeBedFilter &&
-                    this.state.beds !== property.beds
+                    this.state.minBeds > property.beds ||
+                    this.state.maxBeds < property.beds
                 ) {
                     return false;
                 }
                 // if Bath filter is active, check to see if property has the correct # of baths rooms
                 if (
-                    this.state.activeBathFilter &&
-                    this.state.baths !== property.baths
+                    this.state.minBeds > property.beds ||
+                    this.state.maxBeds < property.beds
                 ) {
                     return false;
                 }
@@ -97,14 +89,91 @@ class Test extends Component {
         );
     };
 
+    /**
+     * This function is the callback from the Property Type Dropdown.  It sets the state of the type of building type and calls our filter function
+     *
+     * @param {String} bedCount String representation of integer for users input on number of beds they want to see
+     * @param {String} bedType  Determines if it is the mimBeds or maxBeds field
+     */
+    updateBeds(bedCount, bedType) {
+        let minBeds = this.state.minBeds;
+        let maxBeds = this.state.maxBeds;
+        if (bedType === 'minBeds') {
+            minBeds = bedCount;
+            // if new minimum bed count is greater than the max, set the max equal to the new minimum
+            maxBeds = minBeds > maxBeds ? bedCount : maxBeds;
+        } else {
+            maxBeds = bedCount;
+            // if the new maximum bed count is less than the minimum, set the mimimum to the new maxiumum
+            minBeds = maxBeds < minBeds ? bedCount : minBeds;
+        }
+        this.setState(
+            {
+                minBeds,
+                maxBeds
+            },
+            () => this.filterList()
+        );
+    }
+
     render() {
         return (
             <div className="testContainer">
                 <div className="filterContainer">
-                    <BuildingTypeDD
-                        types={this.state.possibleBuildingTypes}
-                        selectType={this.selectType}
-                    />
+                    <form>
+                        {/* Bedroom input */}
+                        <div className="bedroomContainer">
+                            <h4>Bedrooms:</h4>
+                            <label>
+                                min:
+                                <input
+                                    type="number"
+                                    name="minBeds"
+                                    min="0"
+                                    max="100"
+                                    value={this.state.minBeds}
+                                    onChange={e =>
+                                        this.setState({
+                                            minBeds: e.target.value
+                                        })
+                                    }
+                                    onBlur={e =>
+                                        this.updateBeds(
+                                            e.target.value,
+                                            'minBeds'
+                                        )
+                                    }
+                                />
+                                max:
+                                <input
+                                    type="number"
+                                    name="maxBeds"
+                                    min="0"
+                                    max="100"
+                                    value={this.state.maxBeds}
+                                    onChange={e =>
+                                        this.setState({
+                                            maxBeds: e.target.value
+                                        })
+                                    }
+                                    onBlur={e =>
+                                        this.updateBeds(
+                                            e.target.value,
+                                            'maxBeds'
+                                        )
+                                    }
+                                />
+                            </label>
+                        </div>
+
+                        {/* buildingType input */}
+                        <div className="buildingTypeContainer">
+                            <BuildingTypeDD
+                                types={this.state.possibleBuildingTypes}
+                                selectType={this.selectType}
+                            />
+                        </div>
+                    </form>
                 </div>
                 {this.state.loading ? (
                     <h2>Loading...</h2>
