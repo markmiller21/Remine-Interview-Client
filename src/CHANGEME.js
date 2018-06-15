@@ -35,7 +35,7 @@ class Test extends Component {
                 possibleBuildingTypes: res.data
             });
         });
-        // NOTE: These fetches should happen in some sort of middleware (ie redux or apollo) but I didn't want to over complicate this simple app
+        // NOTE: These fetches would ideally happen in some sort of middleware (ie redux or apollo) but I didn't want to over complicate this simple app
     }
 
     /**
@@ -53,8 +53,8 @@ class Test extends Component {
                 }
                 // if Bath filter is active, check to see if property has the correct # of baths rooms
                 if (
-                    this.state.minBeds > property.beds ||
-                    this.state.maxBeds < property.beds
+                    this.state.minBaths > property.baths ||
+                    this.state.maxBaths < property.baths
                 ) {
                     return false;
                 }
@@ -90,7 +90,9 @@ class Test extends Component {
     };
 
     /**
-     * This function is the callback from the Property Type Dropdown.  It sets the state of the type of building type and calls our filter function
+     * This function is evoked onBlur from either of the Bed input fields. It will determine the new values for minBeds & maxBeds then set the state
+     * and asynchronously call the filterList function
+     *
      *
      * @param {String} bedCount String representation of integer for users input on number of beds they want to see
      * @param {String} bedType  Determines if it is the mimBeds or maxBeds field
@@ -111,6 +113,36 @@ class Test extends Component {
             {
                 minBeds,
                 maxBeds
+            },
+            () => this.filterList()
+        );
+    }
+
+    /**
+     * This function is evoked onBlur from either of the Bath input fields. It will determine the new values for minBaths & maxBaths then set the state
+     * and asynchronously call the filterList function
+     *
+     *
+     * @param {String} bathCount String representation of integer for users input on number of baths they want to see
+     * @param {String} bathType  Determines if it is the mimBeds or maxBeds field
+     */
+    updateBaths(bathCount, bathType) {
+        let minBaths = this.state.minBaths;
+        let maxBaths = this.state.maxBaths;
+        if (bathType === 'minBaths') {
+            minBaths = parseInt(bathCount, 10); // converts input to an Int (from string)
+            // if new minimum bed count is greater than the max, set the max equal to the new minimum
+            maxBaths = minBaths > maxBaths ? minBaths : maxBaths;
+        } else {
+            maxBaths = parseInt(bathCount, 10); // converts input to an Int (from string)
+            // if the new maximum bed count is less than the minimum, set the mimimum to the new maxiumum
+            minBaths = maxBaths < minBaths ? maxBaths : minBaths;
+        }
+        debugger;
+        this.setState(
+            {
+                minBaths,
+                maxBaths
             },
             () => this.filterList()
         );
@@ -160,6 +192,51 @@ class Test extends Component {
                                         this.updateBeds(
                                             e.target.value,
                                             'maxBeds'
+                                        )
+                                    }
+                                />
+                            </label>
+                        </div>
+
+                        {/* Bathroom input */}
+                        <div className="bathroomContainer">
+                            <h4>Bathrooms:</h4>
+                            <label>
+                                min:
+                                <input
+                                    type="number"
+                                    name="minBaths"
+                                    min="0"
+                                    max="100"
+                                    value={this.state.minBaths}
+                                    onChange={e =>
+                                        this.setState({
+                                            minBaths: e.target.value
+                                        })
+                                    }
+                                    onBlur={e =>
+                                        this.updateBaths(
+                                            e.target.value,
+                                            'minBaths'
+                                        )
+                                    }
+                                />
+                                max:
+                                <input
+                                    type="number"
+                                    name="maxBaths"
+                                    min="0"
+                                    max="100"
+                                    value={this.state.maxBaths}
+                                    onChange={e =>
+                                        this.setState({
+                                            maxBaths: e.target.value
+                                        })
+                                    }
+                                    onBlur={e =>
+                                        this.updateBaths(
+                                            e.target.value,
+                                            'maxBaths'
                                         )
                                     }
                                 />
