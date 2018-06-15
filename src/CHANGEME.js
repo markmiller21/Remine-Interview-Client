@@ -12,7 +12,7 @@ class Test extends Component {
             properties: [],
             maxBeds: 100,
             minBeds: 0,
-            maxBaths: 100,
+            maxBaths: 6,
             minBaths: 0,
             loading: true,
             buildingType: '',
@@ -101,13 +101,13 @@ class Test extends Component {
         let minBeds = this.state.minBeds;
         let maxBeds = this.state.maxBeds;
         if (bedType === 'minBeds') {
-            minBeds = bedCount;
+            minBeds = parseInt(bedCount, 10); // converts input to an Int (from string)
             // if new minimum bed count is greater than the max, set the max equal to the new minimum
-            maxBeds = minBeds > maxBeds ? bedCount : maxBeds;
+            maxBeds = minBeds > maxBeds ? minBeds : maxBeds;
         } else {
-            maxBeds = bedCount;
+            maxBeds = parseInt(bedCount, 10); // converts input to an Int (from string)
             // if the new maximum bed count is less than the minimum, set the mimimum to the new maxiumum
-            minBeds = maxBeds < minBeds ? bedCount : minBeds;
+            minBeds = maxBeds < minBeds ? maxBeds : minBeds;
         }
         this.setState(
             {
@@ -138,7 +138,6 @@ class Test extends Component {
             // if the new maximum bed count is less than the minimum, set the mimimum to the new maxiumum
             minBaths = maxBaths < minBaths ? maxBaths : minBaths;
         }
-        debugger;
         this.setState(
             {
                 minBaths,
@@ -151,107 +150,93 @@ class Test extends Component {
     render() {
         return (
             <div className="testContainer">
-                <div className="filterContainer">
-                    <form>
-                        {/* Bedroom input */}
-                        <div className="bedroomContainer">
-                            <h4>Bedrooms:</h4>
-                            <label>
-                                min:
-                                <input
-                                    type="number"
-                                    name="minBeds"
-                                    min="0"
-                                    max="100"
-                                    value={this.state.minBeds}
-                                    onChange={e =>
-                                        this.setState({
-                                            minBeds: e.target.value
-                                        })
-                                    }
-                                    onBlur={e =>
-                                        this.updateBeds(
-                                            e.target.value,
-                                            'minBeds'
-                                        )
-                                    }
-                                />
-                                max:
-                                <input
-                                    type="number"
-                                    name="maxBeds"
-                                    min="0"
-                                    max="100"
-                                    value={this.state.maxBeds}
-                                    onChange={e =>
-                                        this.setState({
-                                            maxBeds: e.target.value
-                                        })
-                                    }
-                                    onBlur={e =>
-                                        this.updateBeds(
-                                            e.target.value,
-                                            'maxBeds'
-                                        )
-                                    }
-                                />
-                            </label>
-                        </div>
-
-                        {/* Bathroom input */}
-                        <div className="bathroomContainer">
-                            <h4>Bathrooms:</h4>
-                            <label>
-                                min:
-                                <input
-                                    type="number"
-                                    name="minBaths"
-                                    min="0"
-                                    max="100"
-                                    value={this.state.minBaths}
-                                    onChange={e =>
-                                        this.setState({
-                                            minBaths: e.target.value
-                                        })
-                                    }
-                                    onBlur={e =>
-                                        this.updateBaths(
-                                            e.target.value,
-                                            'minBaths'
-                                        )
-                                    }
-                                />
-                                max:
-                                <input
-                                    type="number"
-                                    name="maxBaths"
-                                    min="0"
-                                    max="100"
-                                    value={this.state.maxBaths}
-                                    onChange={e =>
-                                        this.setState({
-                                            maxBaths: e.target.value
-                                        })
-                                    }
-                                    onBlur={e =>
-                                        this.updateBaths(
-                                            e.target.value,
-                                            'maxBaths'
-                                        )
-                                    }
-                                />
-                            </label>
-                        </div>
-
-                        {/* buildingType input */}
-                        <div className="buildingTypeContainer">
-                            <BuildingTypeDD
-                                types={this.state.possibleBuildingTypes}
-                                selectType={this.selectType}
+                <form className="filterContainer">
+                    {/* Bedroom input */}
+                    <div className="bedroomContainer">
+                        <h6>Bedrooms</h6>
+                        <label>
+                            min:
+                            <input
+                                type="number"
+                                name="minBeds"
+                                min="0"
+                                max="100"
+                                value={this.state.minBeds}
+                                onChange={e =>
+                                    this.setState({
+                                        minBeds: e.target.value
+                                    })
+                                }
+                                onBlur={e =>
+                                    this.updateBeds(e.target.value, 'minBeds')
+                                }
                             />
-                        </div>
-                    </form>
-                </div>
+                            max:
+                            <input
+                                type="number"
+                                name="maxBeds"
+                                min="0"
+                                max="100"
+                                value={this.state.maxBeds}
+                                onChange={e =>
+                                    this.setState({
+                                        maxBeds: e.target.value
+                                    })
+                                }
+                                onBlur={e =>
+                                    this.updateBeds(e.target.value, 'maxBeds')
+                                }
+                            />
+                        </label>
+                    </div>
+
+                    {/* Bathroom input */}
+                    <div className="bathroomContainer">
+                        <h6>Bathrooms</h6>
+                        <label>
+                            min:
+                            <input
+                                type="number"
+                                name="minBaths"
+                                min="0"
+                                max="100"
+                                value={this.state.minBaths}
+                                onChange={e =>
+                                    this.setState({
+                                        minBaths: e.target.value
+                                    })
+                                }
+                                onBlur={e =>
+                                    this.updateBaths(e.target.value, 'minBaths')
+                                }
+                            />
+                            max:
+                            <input
+                                type="number"
+                                name="maxBaths"
+                                min="0"
+                                max="6"
+                                value={this.state.maxBaths}
+                                onChange={e =>
+                                    this.setState({
+                                        maxBaths: e.target.value
+                                    })
+                                }
+                                onBlur={e =>
+                                    this.updateBaths(e.target.value, 'maxBaths')
+                                }
+                            />
+                        </label>
+                    </div>
+
+                    {/* buildingType input */}
+                    <div className="buildingTypeContainer">
+                        <BuildingTypeDD
+                            types={this.state.possibleBuildingTypes}
+                            selectType={this.selectType}
+                        />
+                    </div>
+                </form>
                 {this.state.loading ? (
                     <h2>Loading...</h2>
                 ) : (
