@@ -46,8 +46,37 @@ class Test extends Component {
         // NOTE: These fetches should happen in some sort of middleware (ie redux or apollo) but I didn't want to over complicate this simple app
     }
 
-    filterProperties() {
-        let initialProperties = this.state.originalProperties;
+    /**
+     * Filters our list of properties and sets the "properties" state to an array of the properties that meet our criteria
+     */
+    filterList() {
+        let filteredProperties = this.state.originalProperties.filter(
+            property => {
+                // if Bed filter is active, check to see if property has the correct # of Beds rooms
+                if (
+                    this.state.activeBedFilter &&
+                    this.state.beds !== property.beds
+                ) {
+                    return false;
+                }
+                // if Bath filter is active, check to see if property has the correct # of baths rooms
+                if (
+                    this.state.activeBathFilter &&
+                    this.state.baths !== property.baths
+                ) {
+                    return false;
+                }
+                // Check buildingType to see if there is an active filter and if the currently selected type is the same as the property
+                if (
+                    this.state.buildingType !== '' &&
+                    this.state.buildingType !== property.buildingType.name
+                ) {
+                    return false;
+                }
+                return property;
+            }
+        );
+        this.setState({ properties: filteredProperties });
     }
 
     /**
@@ -56,11 +85,16 @@ class Test extends Component {
      * @param {Object} type PropertyType Object consisting of building type "name" and "id"
      */
     selectType = type => {
-        if (type === undefined) {
-            this.setState({ buildingType: '' });
-        } else {
-            this.setState({ buildingType: type.name });
-        }
+        let buildingType = type === undefined ? '' : type.name; // if type is undefined (ie cleared selection) set building type to ""
+        // Use setState's callback function to call filterList asynchronously after the state has been updated
+        this.setState(
+            {
+                buildingType
+            },
+            () => {
+                this.filterList();
+            }
+        );
     };
 
     render() {
