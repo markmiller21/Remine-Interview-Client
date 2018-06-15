@@ -26,7 +26,7 @@ class BuildingTypeDD extends Component {
         return (
             <div>
                 <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                    <DropdownToggle caret>Property Types</DropdownToggle>
+                    <DropdownToggle caret>Choose Property Type</DropdownToggle>
                     <DropdownMenu>
                         <DropdownItem header>Property Types</DropdownItem>
                         {this.props.types.map(type => (

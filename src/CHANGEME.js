@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import RemineTable from './components/Table/RemineTable/RemineTable';
 import BuildingTypeDD from './components/common/BuildingTypeDD';
 import API from './API';
+import { splitCamelString } from './helpers';
 
 //  Note: I did not change the name of this component in case you all have automated tests for a "Test" Component
 class Test extends Component {
@@ -152,11 +153,12 @@ class Test extends Component {
             <div className="testContainer">
                 <form className="filterContainer">
                     {/* Bedroom input */}
-                    <div className="bedroomContainer">
+                    <div className="filterComponentContainer">
                         <h6>Bedrooms</h6>
                         <label>
                             min:
                             <input
+                                className="numberInputBox"
                                 type="number"
                                 name="minBeds"
                                 min="0"
@@ -173,6 +175,7 @@ class Test extends Component {
                             />
                             max:
                             <input
+                                className="numberInputBox"
                                 type="number"
                                 name="maxBeds"
                                 min="0"
@@ -191,11 +194,12 @@ class Test extends Component {
                     </div>
 
                     {/* Bathroom input */}
-                    <div className="bathroomContainer">
+                    <div className="filterComponentContainer">
                         <h6>Bathrooms</h6>
                         <label>
                             min:
                             <input
+                                className="numberInputBox"
                                 type="number"
                                 name="minBaths"
                                 min="0"
@@ -212,6 +216,7 @@ class Test extends Component {
                             />
                             max:
                             <input
+                                className="numberInputBox"
                                 type="number"
                                 name="maxBaths"
                                 min="0"
@@ -230,11 +235,15 @@ class Test extends Component {
                     </div>
 
                     {/* buildingType input */}
-                    <div className="buildingTypeContainer">
+                    <div className="filterComponentContainer">
                         <BuildingTypeDD
                             types={this.state.possibleBuildingTypes}
                             selectType={this.selectType}
+                            currentSelection={this.state.buildingType}
                         />
+                        {this.state.buildingType !== '' ? (
+                            <h6>{splitCamelString(this.state.buildingType)}</h6>
+                        ) : null}
                     </div>
                 </form>
                 {this.state.loading ? (

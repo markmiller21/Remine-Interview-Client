@@ -35,7 +35,6 @@ td {
 }
 
 .testContainer {
-    padding-top: 10vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -43,18 +42,20 @@ td {
 }
 
 .filterContainer {
-    padding-top: 10vh;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-around;
+    align-content: center;
+}
+
+.filterComponentContainer {
     justify-content: center;
     align-content: center;
 }
 
-.bedroomContainer {
-}
-
-.bathroomContainer {
-}
-
-.buildingTypeContainer {
+input.numberInputBox {
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: #222;
+    margin-left: 5px;
 }
