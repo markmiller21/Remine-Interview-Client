@@ -17,7 +17,7 @@ class Test extends Component {
             minBaths: 0,
             loading: true,
             buildingType: '',
-            possibleBuildingTypes: []
+            propertyTypes: []
         };
     }
 
@@ -30,10 +30,10 @@ class Test extends Component {
                 loading: false // render table
             });
         });
-        // Fetch the building types for our Dropdown Component
+        // Fetch the property types for our Dropdown Component
         API.getBuildingTypes().then(res => {
             this.setState({
-                possibleBuildingTypes: res.data
+                propertyTypes: res.data // property
             });
         });
         // NOTE: These fetches would ideally happen in some sort of middleware (ie redux or apollo) but I didn't want to over complicate this simple app
@@ -94,6 +94,8 @@ class Test extends Component {
      * This function is evoked onBlur from either of the Bed input fields. It will determine the new values for minBeds & maxBeds then set the state
      * and asynchronously call the filterList function
      *
+     * NOTE: I could not decide if updating on both the blur and change event was a better user experience or
+     * if I should just update the list on blur.  It is an easy update either way.
      *
      * @param {String} bedCount String representation of integer for users input on number of beds they want to see
      * @param {String} bedType  Determines if it is the mimBeds or maxBeds field
@@ -123,6 +125,8 @@ class Test extends Component {
      * This function is evoked onBlur from either of the Bath input fields. It will determine the new values for minBaths & maxBaths then set the state
      * and asynchronously call the filterList function
      *
+     * NOTE: I could not decide if updating on both the blur and change event was a better user experience or
+     * if I should just update the list on blur.  It is an easy update either way.
      *
      * @param {String} bathCount String representation of integer for users input on number of baths they want to see
      * @param {String} bathType  Determines if it is the mimBeds or maxBeds field
@@ -237,7 +241,7 @@ class Test extends Component {
                     {/* buildingType input */}
                     <div className="filterComponentContainer">
                         <BuildingTypeDD
-                            types={this.state.possibleBuildingTypes}
+                            types={this.state.propertyTypes}
                             selectType={this.selectType}
                             currentSelection={this.state.buildingType}
                         />
