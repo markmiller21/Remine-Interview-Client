@@ -154,7 +154,7 @@ class Test extends Component {
                 <form className="filterContainer">
                     {/* Bedroom input */}
                     <div className="filterComponentContainer">
-                        <h6>Bedrooms</h6>
+                        <h5>Bedrooms</h5>
                         <label>
                             min:
                             <input
@@ -195,7 +195,7 @@ class Test extends Component {
 
                     {/* Bathroom input */}
                     <div className="filterComponentContainer">
-                        <h6>Bathrooms</h6>
+                        <h5>Bathrooms</h5>
                         <label>
                             min:
                             <input
