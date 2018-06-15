@@ -1,14 +1,25 @@
 .remineTable {
     width: 100%;
-
+    border-radius: 50px;
 }
-  
+
+.remineTable thead {
+    background-color: #41526d;
+}
+
+.evenTableRow {
+    background-color: #a7b8d3;
+}
+.oddTableRow {
+    background-color: #c0d1ec;
+}
+
 .tableContainer {
     margin: auto;
     padding-top: 1em;
     width: 60%;
 }
-  
+
 .remineTableBody {
     overflow-y: scroll;
     max-height: 30vh;
